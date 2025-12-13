@@ -1,19 +1,18 @@
-from pathlib import Path
+import logging
+from typing import Dict, Tuple
+
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
-from typing import Tuple, Dict, Optional
-import logging
 
 logger = logging.getLogger(__name__)
 
+
 def preprocess_raw_dataframe(
-    df: pd.DataFrame,
-    target_col: str = "european_aqi",
-    id_col: str = "city_id"
+    df: pd.DataFrame, target_col: str = "european_aqi", id_col: str = "city_id"
 ) -> Tuple[pd.DataFrame, pd.Series, Dict[str, LabelEncoder]]:
     """
     Applies full preprocessing pipeline to raw DataFrame.
-    
+
     Steps:
         - Drop rows without target
         - Impute snow_depth with 0
@@ -21,7 +20,7 @@ def preprocess_raw_dataframe(
         - Impute income & nitrogen_monoxide with regional-yearly median
         - Encode categorical features
         - Remove ID/target columns from features
-    
+
     Returns:
         X: processed feature DataFrame (numeric)
         y: target Series
@@ -59,7 +58,9 @@ def preprocess_raw_dataframe(
                 f"{n_null_after} wind_speed_10m values still NaN after group median — "
                 f"filled with global median ({global_median:.2f})"
             )
-        logger.debug(f"Filled {n_null_before - n_null_after} wind_speed_10m values with group median")
+        logger.debug(
+            f"Filled {n_null_before - n_null_after} wind_speed_10m values with group median"
+        )
 
     # 5. Income: regional-yearly median
     if "income" in df.columns:

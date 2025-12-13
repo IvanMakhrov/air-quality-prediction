@@ -34,3 +34,24 @@ dev = [
     "fire>=0.7.1",
     "pre-commit>=4.5.0",
 ]
+
+[tool.ruff]
+line-length = 100
+format = { docstring-code-format = true }
+
+[tool.ruff.lint]
+select = [
+    # isort
+    "I",
+    # pycodestyle
+    "E", "W",
+    # Pyflakes
+    "F",
+    # Pylint - very strict, may be use when have enough time
+    "PL",
+]
+
+pycodestyle = { max-doc-length = 105 }
+
+[tool.ruff.lint.pylint]
+max-args = 10  # default is 5

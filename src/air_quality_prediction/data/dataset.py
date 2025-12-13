@@ -1,36 +1,36 @@
+import logging
 from pathlib import Path
 from typing import Tuple
+
 import pandas as pd
 import torch
-from torch.utils.data import DataLoader, TensorDataset
 from sklearn.model_selection import train_test_split
+from torch.utils.data import DataLoader, TensorDataset
+
 from air_quality_prediction.preprocessing.preprocessing import preprocess_raw_dataframe
-import logging
 
 logger = logging.getLogger(__name__)
+
 
 def create_data_loaders(
     csv_path: Path,
     test_size: float = 0.25,
     val_size: float = 0.25,
-    random_state: int = 42,
     batch_size: int = 64,
     target_col: str = "european_aqi",
-    id_col: str = "city_id"
 ) -> Tuple[DataLoader, DataLoader, DataLoader, dict]:
     """
     End-to-end pipeline: load CSV → preprocess → split → DataLoader.
-    
+
     Returns:
         train_loader, val_loader, test_loader, metadata
     """
     logger.info(f"Loading data from {csv_path}")
+    random_state = 42
     df = pd.read_csv(csv_path)
 
     # Preprocess
-    X, y, label_encoders = preprocess_raw_dataframe(
-        df, target_col=target_col, id_col=id_col
-    )
+    X, y, label_encoders = preprocess_raw_dataframe(df, target_col=target_col)
 
     # Train/test split
     X_train, X_test, y_train, y_test = train_test_split(

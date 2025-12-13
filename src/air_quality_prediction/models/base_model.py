@@ -1,19 +1,16 @@
 import torch
-import torch.nn as nn
+from torch import nn
+
 
 class NeuralNet(nn.Module):
     """
     Simple feedforward neural network for AQI regression.
-    
+
     Architecture:
         Linear(input_size → hidden_size) → ReLU → Dropout → Linear(hidden_size → 1)
     """
-    def __init__(
-        self,
-        input_size: int,
-        hidden_size: int = 128,
-        dropout_rate: float = 0.3
-    ):
+
+    def __init__(self, input_size: int, hidden_size: int = 128, dropout_rate: float = 0.3):
         super().__init__()
         self.fc1 = nn.Linear(input_size, hidden_size)
         self.relu = nn.ReLU()

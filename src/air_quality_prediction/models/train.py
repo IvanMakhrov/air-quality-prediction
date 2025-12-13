@@ -1,11 +1,14 @@
-import torch
-import pytorch_lightning as pl
-from pathlib import Path
-from torch.utils.data import DataLoader
-from air_quality_prediction.models.base_model import NeuralNet
 import logging
+from pathlib import Path
+
+import pytorch_lightning as pl
+import torch
+from torch.utils.data import DataLoader
+
+from air_quality_prediction.models.base_model import NeuralNet
 
 logger = logging.getLogger(__name__)
+
 
 class AQILightningModel(pl.LightningModule):
     def __init__(
@@ -13,14 +16,12 @@ class AQILightningModel(pl.LightningModule):
         input_size: int,
         hidden_size: int = 128,
         learning_rate: float = 1e-3,
-        dropout_rate: float = 0.3
+        dropout_rate: float = 0.3,
     ):
         super().__init__()
         self.save_hyperparameters()
         self.model = NeuralNet(
-            input_size=input_size,
-            hidden_size=hidden_size,
-            dropout_rate=dropout_rate
+            input_size=input_size, hidden_size=hidden_size, dropout_rate=dropout_rate
         )
         self.loss_fn = torch.nn.MSELoss()
 
@@ -44,6 +45,7 @@ class AQILightningModel(pl.LightningModule):
     def configure_optimizers(self):
         return torch.optim.Adam(self.parameters(), lr=self.hparams.learning_rate)
 
+
 def train_model(
     train_loader: DataLoader,
     val_loader: DataLoader,
@@ -53,17 +55,17 @@ def train_model(
     learning_rate: float = 1e-3,
     dropout_rate: float = 0.3,
     checkpoint_dir: Path = Path("models"),
-    seed: int = 42
+    seed: int = 42,
 ) -> AQILightningModel:
     """
     Trains AQILightningModel and saves best checkpoint.
-    
+
     Args:
         train_loader, val_loader: PyTorch DataLoaders
         input_size: number of input features
         ... other hyperparameters
         checkpoint_dir: where to save best model (DVC-tracked)
-    
+
     Returns:
         Trained AQILightningModel
     """
@@ -74,7 +76,7 @@ def train_model(
         input_size=input_size,
         hidden_size=hidden_size,
         learning_rate=learning_rate,
-        dropout_rate=dropout_rate
+        dropout_rate=dropout_rate,
     )
 
     # Callbacks
@@ -86,11 +88,7 @@ def train_model(
         mode="min",
     )
 
-    early_stop = pl.callbacks.EarlyStopping(
-        monitor="val/loss",
-        patience=5,
-        mode="min"
-    )
+    early_stop = pl.callbacks.EarlyStopping(monitor="val/loss", patience=5, mode="min")
 
     trainer = pl.Trainer(
         max_epochs=max_epochs,

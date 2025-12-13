@@ -1,0 +1,36 @@
+[project]
+name = "air-quality-prediction"
+version = "0.1.0"
+description = "Prediction of AQI based on weather and emissions"
+readme = "README.md"
+authors = [
+    { name = "Ivan Makhrov", email = "ismakhrov@edu.hse.ru" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=2.2.6",
+    "pandas>=2.3.3",
+    "pytorch-lightning>=2.6.0",
+    "requests>=2.32.5",
+    "ruff>=0.14.9",
+    "scikit-learn>=1.7.2",
+    "torch<2.8",
+]
+
+[project.scripts]
+air-quality-prediction = "air_quality_prediction:main"
+
+[build-system]
+requires = ["uv_build>=0.9.17,<0.10.0"]
+build-backend = "uv_build"
+
+[tool.uv]
+required-environments = [
+  "sys_platform == 'darwin' and platform_machine == 'x86_64' and python_version >= '3.9'"
+]
+
+[dependency-groups]
+dev = [
+    "fire>=0.7.1",
+    "pre-commit>=4.5.0",
+]

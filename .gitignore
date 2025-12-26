@@ -9,5 +9,23 @@ wheels/
 # Virtual environments
 .venv
 
-#Ruff
+# Ruff
 .ruff_cache
+
+# Data
+data/raw/
+
+# Lightning
+lightning_logs/
+models/best*
+
+# MLLFlow
+mlflow.db
+mlruns/
+/data
+
+# DVC
+tmp/
+
+# Hydra
+outputs/

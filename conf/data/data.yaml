@@ -1,0 +1,7 @@
+csv_path: data/raw/air_weather_data_lite.csv
+batch_size: 64
+test_size: 0.25
+val_size: 0.25
+target_col: european_aqi
+random_state: 42
+num_workers: 3

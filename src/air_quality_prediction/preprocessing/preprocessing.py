@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 def preprocess_raw_dataframe(
-    df: pd.DataFrame, target_col: str = "european_aqi", id_col: str = "city_id"
+    df: pd.DataFrame, target_col: str = None
 ) -> Tuple[pd.DataFrame, pd.Series, Dict[str, LabelEncoder]]:
     """
     Applies full preprocessing pipeline to raw DataFrame.
@@ -79,8 +79,6 @@ def preprocess_raw_dataframe(
     # 7. Prepare X, y
     y = df[target_col]
     cols_to_drop = [target_col]
-    if id_col in df.columns:
-        cols_to_drop.append(id_col)
     X = df.drop(columns=cols_to_drop)
 
     # 8. Encode categorical features

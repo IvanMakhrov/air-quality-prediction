@@ -1,0 +1,7 @@
+defaults:
+  - data: data
+  - logging: logging
+  - model: base_model
+  - _self_
+
+output_file: ${.data.batch_size}_${.model.type}.pth

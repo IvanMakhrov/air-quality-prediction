@@ -3,12 +3,12 @@ stages:
   download:
     cmd: uv run python3 -m air_quality_prediction.data.download_data
     deps:
-    - path: air_quality_prediction/data/download_data.py
+    - path: src/air_quality_prediction/data/download_data.py
       hash: md5
-      md5: d8d08ffafc2d0531bc5ebf366e96505a
-      size: 2447
+      md5: ed40d399e0d1fcbd1f25699cde44f18c
+      size: 2470
     outs:
     - path: data/raw/air_weather_data_lite.csv
       hash: md5
-      md5: ba7ae679793c2fa5ccc4c61a295303bd
-      size: 277637556
+      md5: c6767f48ec95ed5d0d16387e8cd20bac
+      size: 270554128

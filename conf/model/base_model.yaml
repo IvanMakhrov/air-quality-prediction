@@ -1,5 +1,5 @@
 type: base_model
 max_epochs: 10
-hidden_size: 128
+hidden_size: 2048
 learning_rate: 1e-4
 seed: 42

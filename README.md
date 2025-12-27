@@ -100,7 +100,7 @@ air-quality-prediction train model=tabtransformer
 ### Логирование в MLFlow
 
 ```bash
-mlflow ui
+mlflow ui --host 127.0.0.1 --port 8080
 ```
 
 Открываем http://127.0.0.1:8080 для контроля обучения моделей

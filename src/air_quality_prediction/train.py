@@ -34,28 +34,49 @@ def train(cfg: DictConfig):
         num_workers=cfg.data.num_workers,
     )
 
-    datamodule.setup(stage="fit")
-
     L.seed_everything(cfg.model.seed, workers=True)
 
+    mlf_logger = MLFlowLogger(
+        experiment_name=cfg.logging.experiment_name, tracking_uri=cfg.logging.tracking_uri
+    )
+
     if cfg.model.type == "base_model":
-        model = BaseModel(input_size=datamodule.input_size, hidden_size=cfg.model.hidden_size)
+        BaseModel(input_size=datamodule.input_size, hidden_size=cfg.model.hidden_size)
+        mlf_logger.log_hyperparams(
+            {
+                "type": cfg.model.type,
+                "input_size": datamodule.input_size,
+                "hidden_size": cfg.model.hidden_size,
+                "max_epochs": cfg.model.max_epochs,
+                "learning_rate": cfg.model.learning_rate,
+                "seed": cfg.model.seed,
+            }
+        )
     elif cfg.model.type == "tabtransformer":
-        model = TabTransformer(
+        TabTransformer(
             n_num_features=datamodule.input_size,
             d_token=cfg.model.d_token,
             n_layers=cfg.model.n_layers,
             n_heads=cfg.model.n_heads,
             dropout=cfg.model.dropout,
         )
+        mlf_logger.log_hyperparams(
+            {
+                "type": cfg.model.type,
+                "input_size": datamodule.input_size,
+                "d_token": cfg.model.d_token,
+                "n_layers": cfg.model.n_layers,
+                "n_heads": cfg.model.n_heads,
+                "dropout": cfg.model.dropout,
+                "max_epochs": cfg.model.max_epochs,
+                "learning_rate": cfg.model.learning_rate,
+                "seed": cfg.model.seed,
+            }
+        )
     else:
         raise ValueError(f"Unknown model type: {cfg.model.type}")
 
-    module = AQILightningModule(model)
-
-    mlf_logger = MLFlowLogger(
-        experiment_name=cfg.logging.experiment_name, tracking_uri=cfg.logging.tracking_uri
-    )
+    module = AQILightningModule(model_cfg=cfg.model, datamodule=datamodule)
     mlf_logger.log_hyperparams({"git_commit": commit_id})
     trainer = L.Trainer(max_epochs=cfg.model.max_epochs, logger=mlf_logger)
     trainer.fit(module, datamodule=datamodule)

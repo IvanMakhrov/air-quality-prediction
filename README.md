@@ -103,4 +103,4 @@ air-quality-prediction train model=tabtransformer
 mlflow ui
 ```
 
-Открываем http://127.0.0.1:5000 для контроля обучения моделей
+Открываем http://127.0.0.1:8080 для контроля обучения моделей

@@ -48,7 +48,6 @@ def train(cfg: DictConfig):
             n_heads=cfg.model.n_heads,
             dropout=cfg.model.dropout,
         )
-        module = AQILightningModule(model)
     else:
         raise ValueError(f"Unknown model type: {cfg.model.type}")
 

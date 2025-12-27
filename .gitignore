@@ -13,7 +13,7 @@ wheels/
 .ruff_cache
 
 # Data
-data/raw/
+data/raw/*.csv
 
 # Lightning
 lightning_logs/
@@ -22,7 +22,6 @@ models/best*
 # MLLFlow
 mlflow.db
 mlruns/
-/data
 
 # DVC
 tmp/

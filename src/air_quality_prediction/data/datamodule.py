@@ -7,6 +7,9 @@ from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader, TensorDataset
 
 from air_quality_prediction.preprocessing.preprocessing import preprocess_raw_dataframe
+from air_quality_prediction.utils.logger import setup_logger
+
+logger = setup_logger(__name__)
 
 
 class AQIDataModule(L.LightningDataModule):
@@ -62,10 +65,12 @@ class AQIDataModule(L.LightningDataModule):
             df = pd.read_csv(self.csv_path)
             X, y, label_encoders = preprocess_raw_dataframe(df, target_col=self.target_col)
 
+            logger.info("Splitting for train and test")
             X_train, X_test, y_train, y_test = train_test_split(
                 X, y, test_size=self.test_size, random_state=self.random_state
             )
 
+            logger.info("Splitting for train and val")
             X_train, X_val, y_train, y_val = train_test_split(
                 X_train, y_train, test_size=self.val_size, random_state=self.random_state
             )

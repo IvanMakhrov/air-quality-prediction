@@ -3,6 +3,10 @@ from typing import Dict, Tuple
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 
+from air_quality_prediction.utils.logger import setup_logger
+
+logger = setup_logger(__name__)
+
 
 def preprocess_raw_dataframe(
     df: pd.DataFrame, target_col: str = None
@@ -29,13 +33,16 @@ def preprocess_raw_dataframe(
         raise ValueError(f"Target column '{target_col}' not found in DataFrame")
 
     # 2. Drop rows with missing target
+    logger.info("Dropping rows with null values")
     df = df.dropna(subset=[target_col]).copy()
 
     # 3. Snow depth: fill with 0
+    logger.info("Processing snow_depth")
     if "snow_depth" in df.columns:
         df["snow_depth"] = df["snow_depth"].fillna(0)
 
     # 4. Wind speed: regional-monthly median
+    logger.info("Processing with_speed_10m")
     if "wind_speed_10m" in df.columns:
         wind_median = df.groupby(["region", "year", "month"])["wind_speed_10m"].transform("median")
         df["wind_speed_10m"] = df["wind_speed_10m"].fillna(wind_median)
@@ -46,21 +53,25 @@ def preprocess_raw_dataframe(
             df["wind_speed_10m"] = df["wind_speed_10m"].fillna(global_median)
 
     # 5. Income: regional-yearly median
+    logger.info("Processing income")
     if "income" in df.columns:
         median_income = df.groupby(["region", "year"])["income"].transform("median")
         df["income"] = df["income"].fillna(median_income)
 
     # 6. Nitrogen monoxide: regional-yearly median
+    logger.info("Processing nitrogen_monoxide")
     if "nitrogen_monoxide" in df.columns:
         median_no = df.groupby(["region", "year"])["nitrogen_monoxide"].transform("median")
         df["nitrogen_monoxide"] = df["nitrogen_monoxide"].fillna(median_no)
 
     # 7. Prepare X, y
+    logger.info("Splitting at x and y")
     y = df[target_col]
     cols_to_drop = [target_col]
     X = df.drop(columns=cols_to_drop)
 
     # 8. Encode categorical features
+    logger.info("Applying label encoding")
     label_encoders = {}
     for col in X.select_dtypes(include=["object"]).columns:
         le = LabelEncoder()

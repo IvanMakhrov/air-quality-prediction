@@ -6,6 +6,10 @@ from hydra import compose, initialize
 from hydra.utils import to_absolute_path
 from omegaconf import DictConfig
 
+from air_quality_prediction.utils.logger import setup_logger
+
+logger = setup_logger(__name__)
+
 
 def get_direct_download_url(public_url: str) -> str:
     """
@@ -25,6 +29,7 @@ def get_direct_download_url(public_url: str) -> str:
         "Chrome/112.0 Safari/537.36"
     }
 
+    logger.info("Getting link to download data")
     response = requests.get(api_url, headers=headers, timeout=10)
     response.raise_for_status()
 
@@ -33,6 +38,7 @@ def get_direct_download_url(public_url: str) -> str:
     if not download_url:
         raise RuntimeError(f"Failed to get download URL. API response: {data}")
 
+    logger.info("Url found")
     return download_url
 
 
@@ -43,12 +49,15 @@ def download_from_yandex_disk(public_key: str, output_dir: Path, filename: str) 
 
     try:
         direct_url = get_direct_download_url(public_key)
+        logger.info("Starting file download")
         response = requests.get(direct_url, stream=True, timeout=60)
         response.raise_for_status()
 
         with open(output_path, "wb") as f:
             for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
+
+        logger.info("File downloaded")
 
         return output_path
 

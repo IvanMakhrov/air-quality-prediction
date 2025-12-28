@@ -1,5 +1,6 @@
 defaults:
   - data: data
+  - data_download: download
   - logging: logging
   - model: base_model
   - _self_

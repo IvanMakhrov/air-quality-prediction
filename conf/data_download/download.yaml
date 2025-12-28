@@ -1,0 +1,3 @@
+yandex_public_url: "https://disk.yandex.ru/d/wMVfwD9hLs2Apw"
+output_dir: "data/raw"
+filename: "air_weather_data_lite.csv"

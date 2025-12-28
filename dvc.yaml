@@ -3,6 +3,7 @@ stages:
     cmd: uv run python3 -m air_quality_prediction.data.download_data
     deps:
       - src/air_quality_prediction/data/download_data.py
+      - conf/data_download/download.yaml
     outs:
       - data/raw/air_weather_data_lite.csv:
           cache: true

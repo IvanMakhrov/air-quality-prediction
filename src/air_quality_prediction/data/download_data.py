@@ -2,10 +2,9 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 import requests
-
-YANDEX_DISK_PUBLIC_KEY = "https://disk.yandex.ru/d/wMVfwD9hLs2Apw"
-OUTPUT_DIR = Path("data/raw")
-CSV_FILENAME = "air_weather_data_lite.csv"
+from hydra import compose, initialize
+from hydra.utils import to_absolute_path
+from omegaconf import DictConfig
 
 
 def get_direct_download_url(public_url: str) -> str:
@@ -38,6 +37,7 @@ def get_direct_download_url(public_url: str) -> str:
 
 
 def download_from_yandex_disk(public_key: str, output_dir: Path, filename: str) -> Path:
+    output_dir = Path(to_absolute_path(output_dir))
     output_dir.mkdir(parents=True, exist_ok=True)
     output_path = output_dir / filename
 
@@ -56,13 +56,15 @@ def download_from_yandex_disk(public_key: str, output_dir: Path, filename: str) 
         raise
 
 
-def download_data() -> Path:
+def download_data(cfg: DictConfig) -> Path:
     return download_from_yandex_disk(
-        public_key=YANDEX_DISK_PUBLIC_KEY,
-        output_dir=OUTPUT_DIR,
-        filename=CSV_FILENAME,
+        public_key=cfg.data_download.yandex_public_url,
+        output_dir=cfg.data_download.output_dir,
+        filename=cfg.data_download.filename,
     )
 
 
 if __name__ == "__main__":
-    download_data()
+    with initialize(version_base=None, config_path="../../../conf", job_name="download"):
+        cfg = compose(config_name="config")
+    download_data(cfg)

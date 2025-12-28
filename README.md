@@ -65,6 +65,14 @@ pre-commit run -a
 dvc repro download
 ```
 
+### Логирование в MLFlow
+
+```bash
+mlflow ui --host 127.0.0.1 --port 8080
+```
+
+Открываем http://127.0.0.1:8080 для контроля обучения моделей
+
 ### Обучение моделей
 
 Архитектура базовой модели:
@@ -96,11 +104,3 @@ air-quality-prediction train
 ```bash
 air-quality-prediction train model=tabtransformer
 ```
-
-### Логирование в MLFlow
-
-```bash
-mlflow ui --host 127.0.0.1 --port 8080
-```
-
-Открываем http://127.0.0.1:8080 для контроля обучения моделей

@@ -5,12 +5,12 @@ stages:
     deps:
     - path: conf/data_download/download.yaml
       hash: md5
-      md5: dec500470130b963fb9e59f4edc514be
-      size: 121
+      md5: c448dedcf7d9bc407a8bda8cfa2a01d0
+      size: 122
     - path: src/air_quality_prediction/data/download_data.py
       hash: md5
-      md5: f2362fe6678216dfeb600ac80e3fc30e
-      size: 2279
+      md5: 119c6e5b5ef4397e7ca1ff3ee827553e
+      size: 2208
     outs:
     - path: data/raw/air_weather_data_lite.csv
       hash: md5

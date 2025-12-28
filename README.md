@@ -62,7 +62,7 @@ pre-commit run -a
 ### Загрузка данных
 
 ```bash
-dvc repro download
+air-quality-prediction download
 ```
 
 ### Логирование в MLFlow

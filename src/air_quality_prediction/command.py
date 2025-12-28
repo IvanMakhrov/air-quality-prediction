@@ -18,6 +18,11 @@ def download():
     except Exception:
         raise
 
+    try:
+        subprocess.run([sys.executable, "-m", "dvc", "push"], check=True)
+    except Exception:
+        raise
+
 
 def train_model(overrides: list = None, config_path: str = "conf", config_name: str = "config"):
     """

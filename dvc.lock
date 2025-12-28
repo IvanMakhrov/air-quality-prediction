@@ -9,7 +9,7 @@ stages:
       size: 122
     - path: src/air_quality_prediction/data/download_data.py
       hash: md5
-      md5: 30784f4b2e4332108f55bd882d3bdb57
+      md5: 2ff2434a836f048c4de309aca257a276
       size: 2467
     outs:
     - path: data/raw/air_weather_data_lite.csv
